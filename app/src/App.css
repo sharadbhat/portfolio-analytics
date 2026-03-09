@@ -1,0 +1,107 @@
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  background: radial-gradient(
+      circle at top left,
+      rgba(18, 184, 134, 0.2),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(12, 74, 110, 0.14),
+      transparent 20%
+    ),
+    linear-gradient(180deg, #f5fbfa 0%, #eef5f4 48%, #e7eeee 100%);
+}
+
+.app-stack {
+  width: 100%;
+  min-height: calc(100vh - 2 * clamp(1.5rem, 4vw, 3.5rem));
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-header {
+  width: 100%;
+  gap: 1rem;
+}
+
+.brand-lockup {
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+}
+
+.brand-logo {
+  width: 26px !important;
+  min-width: 26px;
+  height: 26px;
+}
+
+.hero-icon {
+  flex-shrink: 0;
+}
+
+.app-title {
+  font-size: clamp(2.3rem, 6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+  margin-bottom: 0.9rem;
+}
+
+.upload-panel,
+.samples-panel {
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.dropzone {
+  min-height: 280px;
+  border: 2px dashed rgba(13, 148, 136, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(240, 253, 250, 0.9) 0%,
+    rgba(248, 250, 252, 0.95) 100%
+  );
+}
+
+.upload-status {
+  gap: 1rem;
+}
+
+.sample-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(244, 247, 247, 0.94) 100%
+  );
+}
+
+.page-attribution {
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+@media (max-width: 48em) {
+  .app-shell {
+    padding: 1rem;
+  }
+
+  .app-stack {
+    min-height: calc(100vh - 2rem);
+  }
+
+  .upload-status {
+    align-items: stretch;
+  }
+
+  .brand-logo {
+    width: 22px;
+    min-width: 22px;
+    height: 22px;
+  }
+}

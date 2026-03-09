@@ -1,0 +1,6 @@
+ticker,shares,price,market_value,sector,weight
+AAPL,25,192.14,4803.50,Technology,0.22
+MSFT,18,417.82,7520.76,Technology,0.34
+VTI,20,272.65,5453.00,Index Fund,0.25
+BND,30,72.18,2165.40,Fixed Income,0.10
+JNJ,12,161.07,1932.84,Healthcare,0.09
