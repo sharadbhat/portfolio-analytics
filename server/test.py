@@ -1,8 +1,9 @@
 # test.py
 
 import pandas as pd
-from utils import get_sector_allocation
+from utils import get_benchmark_comparison
 
 df = pd.read_csv('data/demo_portfolio.csv')
 
-get_sector_allocation(df)
+a = get_benchmark_comparison(df)
+print(a)

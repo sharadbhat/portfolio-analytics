@@ -4,10 +4,49 @@
 import pandas as pd
 import numpy as np
 import yfinance as yf
+import datetime as dt
 
 def get_sector_allocation(stocks_df):
-    sector_df = {}
-    sectors = []
+    portfolio_df = get_portfolio_weights(stocks_df)
+    total_value = portfolio_df['Amount Invested'].sum()
+    sector_group = portfolio_df.groupby('sector').agg(invested_per_sector = ('Amount Invested', 'sum'),
+                                                       num_holdings = ('ticker', 'count')).reset_index()
+    sector_group['percent_in_sector'] = round(sector_group['invested_per_sector']*100/total_value, 2)
+    sector_group = sector_group.sort_values('percent_in_sector', ascending=False)
+    portfolio_df = portfolio_df.sort_values('Amount Invested', ascending=False)
+    return portfolio_df
+    #return {'sector_allocation':sector_group,
+    #        'portfolio_allocation': portfolio_df}
+
+
+def get_benchmark_comparison(portfolio_df):
+    end_time = dt.date.today()
+    start_time = end_time - dt.timedelta(days=365)
+    ticker_list = portfolio_df['ticker'].to_list()
+    if 'SPY' not in ticker_list:
+        ticker_list.append('SPY')
+    historical_price_df = yf.download(ticker_list, start=start_time, end=end_time)
+    daily_return = historical_price_df['Close'].pct_change().dropna()
+    portfolio_df = get_portfolio_weights(portfolio_df).sort_values('weights', ascending=False)
+    weights = portfolio_df.set_index('ticker')['weights']
+    weighted_returns = daily_return*weights
+    daily_portfolio_returns = weighted_returns.sum(axis=1)
+    benchmark_return = daily_return['SPY']
+    cumulative_return_portfolio_series = (1 + daily_portfolio_returns).cumprod()
+    cumulative_return_portfolio = cumulative_return_portfolio_series.iloc[-1] - 1
+    cumulative_return_benchmark_series = (1 + benchmark_return).cumprod()
+    cumulative_return_benchmark = cumulative_return_benchmark_series.iloc[-1] - 1
+    portfolio_alpha = cumulative_return_portfolio - cumulative_return_benchmark
+    tracking_error = (daily_portfolio_returns - benchmark_return).std()
+    return {
+        "portfolio_daily_return": cumulative_return_portfolio_series,
+        "benchmark_daily_return": cumulative_return_benchmark_series,
+        "portfolio_alpha": portfolio_alpha,
+        "tracking_error": tracking_error
+    }
+
+def get_portfolio_weights(stocks_df):
+    cp = []
     for ticker in stocks_df['ticker']:
         try:
             info = yf.Ticker(ticker).info
@@ -16,14 +55,12 @@ def get_sector_allocation(stocks_df):
         except Exception:
             sector = 'Unknown'
             current_price = 0
-        sectors.append({'ticker': ticker,
+        cp.append({'ticker': ticker,
                         'sector': sector,
                         'Current Price': current_price})
-    sector_df = pd.DataFrame(sectors)
-    portfolio_df = pd.merge(stocks_df, sector_df, on="ticker")
+    cp_df = pd.DataFrame(cp)
+    portfolio_df = pd.merge(stocks_df, cp_df, on="ticker")
     portfolio_df['Amount Invested'] = portfolio_df['quantity'] * portfolio_df['Current Price']
     total_value = portfolio_df['Amount Invested'].sum()
-    sector_group = portfolio_df.groupby('sector').agg(invested_per_sector = ('Amount Invested', 'sum'),
-                                                       num_holdings = ('ticker', 'count')).reset_index()
-    sector_group['percent_in_sector'] = round(sector_group['invested_per_sector']*100/total_value, 2)
-    return sector_group
+    portfolio_df['weights'] = round(portfolio_df['Amount Invested']/total_value, 2)
+    return portfolio_df
