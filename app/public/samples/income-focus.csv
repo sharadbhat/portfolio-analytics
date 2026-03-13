@@ -1,0 +1,7 @@
+ticker,shares,price,market_value,sector,weight
+SCHD,40,80.44,3217.60,ETF,0.24
+VYM,36,121.38,4369.68,ETF,0.32
+O,60,54.17,3250.20,Real Estate,0.24
+PG,14,159.84,2237.76,Consumer Staples,0.16
+DUK,10,104.33,1043.30,Utilities,0.08
+PFFD,28,31.07,869.96,Preferred Stock,0.06

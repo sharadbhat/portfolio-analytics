@@ -1,0 +1,8 @@
+ticker,shares,price,market_value,sector,weight
+NVDA,16,942.89,15086.24,Technology,0.24
+META,20,488.12,9762.40,Communication Services,0.16
+AMZN,22,178.75,3932.50,Consumer Discretionary,0.06
+TSLA,18,201.36,3624.48,Consumer Discretionary,0.06
+SHOP,35,78.22,2737.70,Technology,0.04
+QQQ,28,438.10,12266.80,ETF,0.20
+ARKK,55,51.82,2850.10,ETF,0.04
