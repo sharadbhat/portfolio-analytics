@@ -14,23 +14,13 @@ def get_sector_allocation(stocks_df):
     sector_group['percent_in_sector'] = round(sector_group['invested_per_sector']*100/total_value, 2)
     sector_group = sector_group.sort_values('percent_in_sector', ascending=False)
     portfolio_df = portfolio_df.sort_values('Amount Invested', ascending=False)
-    return portfolio_df
-    #return {'sector_allocation':sector_group,
-    #        'portfolio_allocation': portfolio_df}
+    return {'sector_allocation':sector_group,
+            'portfolio_allocation': portfolio_df}
 
 
 def get_benchmark_comparison(portfolio_df):
-    end_time = dt.date.today()
-    start_time = end_time - dt.timedelta(days=365)
-    ticker_list = portfolio_df['ticker'].to_list()
-    if 'SPY' not in ticker_list:
-        ticker_list.append('SPY')
-    historical_price_df = yf.download(ticker_list, start=start_time, end=end_time)
-    daily_return = historical_price_df['Close'].pct_change().dropna()
-    portfolio_df = get_portfolio_weights(portfolio_df).sort_values('weights', ascending=False)
-    weights = portfolio_df.set_index('ticker')['weights']
-    weighted_returns = daily_return*weights
-    daily_portfolio_returns = weighted_returns.sum(axis=1)
+    daily_return = get_daily_returns(portfolio_df)
+    daily_portfolio_returns = get_weighted_portfolio_returns(portfolio_df, daily_return)
     benchmark_return = daily_return['SPY']
     cumulative_return_portfolio_series = (1 + daily_portfolio_returns).cumprod()
     cumulative_return_portfolio = cumulative_return_portfolio_series.iloc[-1] - 1
@@ -43,6 +33,40 @@ def get_benchmark_comparison(portfolio_df):
         "benchmark_daily_return": cumulative_return_benchmark_series,
         "portfolio_alpha": portfolio_alpha,
         "tracking_error": tracking_error
+    }
+
+def get_daily_returns(portfolio_df):
+    end_time = dt.date.today()
+    start_time = end_time - dt.timedelta(days=365)
+    ticker_list = portfolio_df['ticker'].to_list()
+    if 'SPY' not in ticker_list:
+        ticker_list.append('SPY')
+    historical_price_df = yf.download(ticker_list, start=start_time, end=end_time)
+    daily_return = historical_price_df['Close'].pct_change().dropna()
+    return daily_return
+
+def get_weighted_portfolio_returns(portfolio_df, daily_return):
+    portfolio_df = get_portfolio_weights(portfolio_df).sort_values('weights', ascending=False)
+    weights = portfolio_df.set_index('ticker')['weights']
+    weighted_returns = daily_return*weights
+    daily_portfolio_returns = weighted_returns.sum(axis=1)
+    return daily_portfolio_returns
+    
+
+def get_performance(portfolio_df):
+    trading_days = 252
+    daily_portfolio_returns = get_weighted_portfolio_returns(portfolio_df, get_daily_returns(portfolio_df))
+    cumulative_return_portfolio_series = (1 + daily_portfolio_returns).cumprod()
+    portfolio_cumulative_return = cumulative_return_portfolio_series.iloc[-1] - 1
+    portfolio_annualized_return = (1 + portfolio_cumulative_return) ** (252/len(daily_portfolio_returns)) - 1
+    portfolio_df = get_portfolio_weights(portfolio_df)
+    total_value = portfolio_df['Amount Invested'].sum()
+    daily_pl = daily_portfolio_returns * total_value
+    return {
+        'cumulative_return_series': cumulative_return_portfolio_series,
+        'portfolio_cumulative_return': portfolio_cumulative_return,
+        'portfolio_annualized_return': portfolio_annualized_return,
+        'daily_pl': daily_pl
     }
 
 def get_portfolio_weights(stocks_df):
