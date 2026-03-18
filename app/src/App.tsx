@@ -1,36 +1,66 @@
-import { useState } from "react";
-import { Anchor, Box, Stack, Text } from "@mantine/core";
-import type { FileWithPath } from "@mantine/dropzone";
+import { Anchor, Box, Group, SegmentedControl, Stack, Text } from "@mantine/core";
+import { useEffect, useRef, useState } from "react";
 import HeroSection from "./components/HeroSection";
+import HoldingsBreakdownSection from "./components/HoldingsBreakdownSection";
 import PortfolioUploadPanel from "./components/PortfolioUploadPanel";
 import { sampleCsvs } from "./data/sampleCsvs";
+import { usePortfolioUploadStore } from "./store/portfolioUploadStore";
 import "./App.css";
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState<FileWithPath | null>(null);
-  const [fileError, setFileError] = useState<string | null>(null);
+  const analytics = usePortfolioUploadStore((state) => state.analytics);
+  const resultsHeadingRef = useRef<HTMLParagraphElement | null>(null);
+  const [segmentValue, setSegmentValue] = useState("holdings");
 
-  const handleDrop = (files: FileWithPath[]) => {
-    setSelectedFile(files[0] ?? null);
-    setFileError(null);
-  };
+  useEffect(() => {
+    if (!analytics || !resultsHeadingRef.current) {
+      return;
+    }
 
-  const handleReject = () => {
-    setSelectedFile(null);
-    setFileError("Please upload a CSV file under 5 MB.");
-  };
+    resultsHeadingRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, [analytics]);
 
   return (
     <Box className="app-shell">
       <Stack className="app-stack" gap="xl">
         <HeroSection />
-        <PortfolioUploadPanel
-          selectedFile={selectedFile}
-          fileError={fileError}
-          samples={sampleCsvs}
-          onDrop={handleDrop}
-          onReject={handleReject}
-        />
+        <PortfolioUploadPanel samples={sampleCsvs} />
+        {analytics ? (
+          <Stack gap="sm">
+            <Text
+              ref={resultsHeadingRef}
+              fw={700}
+              ta="center"
+              size="xl"
+              className="results-heading results-anchor"
+            >
+              Here&apos;s how your portfolio stacks up
+            </Text>
+            <Group justify="center">
+              <SegmentedControl
+                value={segmentValue}
+                size="md"
+                radius="xl"
+                className="results-nav"
+                mx="auto"
+                onChange={setSegmentValue}
+                data={[
+                  { label: "Holdings", value: "holdings" },
+                  { label: "Performance", value: "performance" },
+                  { label: "Risk", value: "risk" },
+                ]}
+              />
+            </Group>
+            {segmentValue === "holdings" ? (
+              <HoldingsBreakdownSection
+                rows={analytics.holdings.portfolio_allocation}
+              />
+            ) : null}
+          </Stack>
+        ) : null}
         <Text size="sm" c="dimmed" ta="right" className="page-attribution">
           <Anchor
             href="https://www.flaticon.com/free-icons/stocks"

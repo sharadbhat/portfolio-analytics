@@ -31,7 +31,6 @@ def analyze_portfolio(csv):
     results['risk']['portfolio_cvar'] = convert_numpy(risk_results['portfolio_cvar'])
     results['risk']['portfolio_max_drawdown'] = convert_numpy(risk_results['portfolio_max_drawdown'])
 
-    print(results)
     return results
 
 def series_to_dict(series):

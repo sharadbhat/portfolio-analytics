@@ -1,10 +1,13 @@
 from io import StringIO
 from flask import Flask, jsonify, request
+from flask_cors import CORS, cross_origin
 from business_logic import analyze_portfolio
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/submit', methods=['POST'])
+@cross_origin(origins='http://localhost:5173')
 def handle_submit():
     content_type = (request.content_type or '').lower()
 

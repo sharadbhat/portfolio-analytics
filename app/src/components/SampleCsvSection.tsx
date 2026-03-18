@@ -11,8 +11,8 @@ function SampleCsvSection({ samples }: SampleCsvSectionProps) {
     <Stack gap="lg">
       <Box>
         <Text c="dimmed" mt="xs">
-          Or use a sample dataset to explore the scoring flow before uploading
-          your own portfolio.
+          Or try a sample portfolio to explore the scoring flow before uploading
+          your own.
         </Text>
       </Box>
 

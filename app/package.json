@@ -14,8 +14,10 @@
     "@mantine/dropzone": "^8.3.16",
     "@mantine/hooks": "^8.3.16",
     "@tabler/icons-react": "^3.40.0",
+    "axios": "^1.13.6",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
