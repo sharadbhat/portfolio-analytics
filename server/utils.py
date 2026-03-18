@@ -88,3 +88,39 @@ def get_portfolio_weights(stocks_df):
     total_value = portfolio_df['Amount Invested'].sum()
     portfolio_df['weights'] = round(portfolio_df['Amount Invested']/total_value, 2)
     return portfolio_df
+
+def get_risk_metrics(portfolio_df):
+    rf = 0.0423
+    trading_days = 252
+    # calculate sharpe ratio
+    daily_portfolio_returns = get_weighted_portfolio_returns(portfolio_df, get_daily_returns(portfolio_df))
+    cumulative_return_portfolio_series = (1 + daily_portfolio_returns).cumprod()
+    portfolio_cumulative_return = cumulative_return_portfolio_series.iloc[-1] - 1
+    portfolio_annualized_return = (1 + portfolio_cumulative_return) ** (252/len(daily_portfolio_returns)) - 1
+    portfolio_std_dev_ann = daily_portfolio_returns.std() * np.sqrt(252)
+    portfolio_sharpe_ratio = (portfolio_annualized_return - rf ) / portfolio_std_dev_ann
+
+    # calculate sortino ratio
+    daily_portfolio_returns_positive = daily_portfolio_returns[daily_portfolio_returns<0]
+    portfolio_std_dev_ann_neg = daily_portfolio_returns_positive.std() * np.sqrt(252)
+    portfolio_sortino_ratio = (portfolio_annualized_return -rf) / portfolio_std_dev_ann_neg
+
+    # calculate VAR at 95% confidence
+    var = np.percentile(daily_portfolio_returns, 5)
+
+    # calculate CVAR
+    cvar = daily_portfolio_returns[daily_portfolio_returns <= var].mean()
+
+    # calculate max drawdown
+    max_drawdown = 0
+    running_max = cumulative_return_portfolio_series.cummax()
+    drawdown = (cumulative_return_portfolio_series - running_max) / running_max
+    max_drawdown = drawdown.min()
+
+    return {
+        'portfolio_sharpe_ratio': portfolio_sharpe_ratio,
+        'portfolio_sortino_ratio': portfolio_sortino_ratio,
+        'portfolio_var': var,
+        'portfolio_cvar': cvar,
+        'portfolio_max_drawdown': max_drawdown
+    }
