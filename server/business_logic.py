@@ -3,7 +3,9 @@ import numpy as np
 import utils
 
 def analyze_portfolio(csv):
-    portfolio_df = pd.read_csv(csv)
+    stocks_df = pd.read_csv(csv)
+    daily_return = utils.get_daily_returns(stocks_df)
+    portfolio_df = utils.get_portfolio_weights(stocks_df)
     results = {}
     results['holdings'] = {}
     results['performance'] = {}
@@ -13,25 +15,24 @@ def analyze_portfolio(csv):
     results['holdings']['sector'] = sector_result['sector_allocation'].to_dict(orient='records')
     results['holdings']['portfolio_allocation'] = sector_result['portfolio_allocation'].to_dict(orient='records')
     
-    benchmark_perf_result = utils.get_benchmark_comparison(portfolio_df)
+    benchmark_perf_result = utils.get_benchmark_comparison(portfolio_df, daily_return)
     results['performance']['portfolio_perf'] = series_to_dict(benchmark_perf_result['portfolio_daily_return'])
     results['performance']['benchmark_perf'] = series_to_dict(benchmark_perf_result['benchmark_daily_return'])
     results['performance']['portolio_alpha'] = convert_numpy(benchmark_perf_result['portfolio_alpha'])
     results['performance']['tracking_error'] = convert_numpy(benchmark_perf_result['tracking_error'])
 
-    perf_results = utils.get_performance(portfolio_df)
+    perf_results = utils.get_performance(portfolio_df, daily_return)
     results['performance']['return_series'] = series_to_dict(perf_results['cumulative_return_series'])
     results['performance']['annualized_return'] = convert_numpy(perf_results['portfolio_annualized_return'])
     results['performance']['daily_pl_series'] = series_to_dict(perf_results['daily_pl'])
 
-    risk_results = utils.get_risk_metrics(portfolio_df)
+    risk_results = utils.get_risk_metrics(portfolio_df, daily_return)
     results['risk']['sharpe_ratio'] = convert_numpy(risk_results['portfolio_sharpe_ratio'])
     results['risk']['sortino_ratio'] = convert_numpy(risk_results['portfolio_sortino_ratio'])
     results['risk']['portfolio_var'] = convert_numpy(risk_results['portfolio_var'])
     results['risk']['portfolio_cvar'] = convert_numpy(risk_results['portfolio_cvar'])
     results['risk']['portfolio_max_drawdown'] = convert_numpy(risk_results['portfolio_max_drawdown'])
 
-    print(results)
     return results
 
 def series_to_dict(series):
