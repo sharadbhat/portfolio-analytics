@@ -13,8 +13,8 @@ export type SampleCsv = {
 };
 
 export type PortfolioAllocationRow = {
-  "Amount Invested": number;
-  "Current Price": number;
+  amount_invested: number;
+  current_price: number;
   avg_buy_price: number;
   quantity: number;
   sector: string;

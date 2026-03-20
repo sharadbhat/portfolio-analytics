@@ -5,7 +5,8 @@
 .app-shell {
   min-height: 100vh;
   padding: clamp(1.5rem, 4vw, 3.5rem);
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at top left,
       rgba(18, 184, 134, 0.2),
       transparent 24%
@@ -19,7 +20,8 @@
 }
 
 [data-mantine-color-scheme="dark"] .app-shell {
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle at top left,
       rgba(18, 184, 134, 0.16),
       transparent 24%
@@ -91,16 +93,68 @@
 }
 
 .results-nav {
-  margin: 0 auto 0.25rem;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+}
+
+.holdings-breakdown-nav {
+  width: min(420px, 100%);
+  align-self: center;
+}
+
+.results-nav-primary {
+  background: rgba(255, 255, 255, 0.76);
+  border-color: rgba(18, 184, 134, 0.12);
+  box-shadow:
+    0 10px 24px rgba(15, 23, 42, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.results-nav-primary .mantine-SegmentedControl-indicator {
+  background: rgba(18, 184, 134, 0.14);
+  border: 1px solid rgba(18, 184, 134, 0.18);
+  box-shadow: none;
+}
+
+.results-nav-primary .mantine-SegmentedControl-label {
+  color: #53706b;
+  font-weight: 600;
+}
+
+.results-nav-primary .mantine-SegmentedControl-label[data-active] {
+  color: #0f766e;
 }
 
 [data-mantine-color-scheme="dark"] .results-nav {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(148, 163, 184, 0.12);
   box-shadow: 0 12px 26px rgba(0, 0, 0, 0.24);
+}
+
+[data-mantine-color-scheme="dark"] .results-nav-primary {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(45, 212, 191, 0.12);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+[data-mantine-color-scheme="dark"] .results-nav-primary
+  .mantine-SegmentedControl-indicator {
+  background: rgba(45, 212, 191, 0.12);
+  border: 1px solid rgba(45, 212, 191, 0.16);
+  box-shadow: none;
+}
+
+[data-mantine-color-scheme="dark"] .results-nav-primary
+  .mantine-SegmentedControl-label {
+  color: #9ab9b3;
+}
+
+[data-mantine-color-scheme="dark"] .results-nav-primary
+  .mantine-SegmentedControl-label[data-active] {
+  color: #83f1dc;
 }
 
 .upload-panel,
@@ -125,7 +179,10 @@
     rgba(240, 253, 250, 0.9) 0%,
     rgba(248, 250, 252, 0.95) 100%
   );
-  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
 }
 
 .dropzone-prompt {
@@ -201,6 +258,51 @@
   border-color: rgba(15, 23, 42, 0.08);
 }
 
+.risk-metrics-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.performance-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.daily-pl-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.performance-chart-card {
+  overflow: hidden;
+}
+
+.sector-donut-card {
+  display: flex;
+  justify-content: center;
+}
+
+.sector-donut-legend {
+  width: min(560px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.sector-donut-legend-item {
+  min-width: 0;
+}
+
+.risk-metrics-grid-top {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.risk-metrics-grid-bottom {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 [data-mantine-color-scheme="dark"] .holdings-summary-card {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(148, 163, 184, 0.14);
@@ -233,6 +335,14 @@
   }
 
   .holdings-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .risk-metrics-grid-top,
+  .risk-metrics-grid-bottom,
+  .performance-metrics-grid,
+  .daily-pl-summary-grid,
+  .sector-donut-legend {
     grid-template-columns: 1fr;
   }
 

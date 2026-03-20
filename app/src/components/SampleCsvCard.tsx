@@ -7,8 +7,7 @@ type SampleCsvCardProps = {
 };
 
 function SampleCsvCard({ sample }: SampleCsvCardProps) {
-  const isSubmitting = usePortfolioUploadStore((state) => state.isSubmitting);
-  const analyzeSampleCsv = usePortfolioUploadStore((state) => state.analyzeSampleCsv);
+  const { analyzeSampleCsv } = usePortfolioUploadStore();
 
   return (
     <Paper radius="lg" p="lg" withBorder className="sample-card">
@@ -27,11 +26,10 @@ function SampleCsvCard({ sample }: SampleCsvCardProps) {
 
         <Button
           onClick={() => {
-            void analyzeSampleCsv(sample);
+            analyzeSampleCsv(sample);
           }}
           variant="light"
           radius="xl"
-          loading={isSubmitting}
         >
           Analyze
         </Button>

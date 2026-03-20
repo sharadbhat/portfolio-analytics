@@ -4,8 +4,7 @@ import { usePortfolioUploadStore } from "../store/portfolioUploadStore";
 
 function UploadCtaSection() {
   const [hasTriedSubmit, setHasTriedSubmit] = useState(false);
-  const { selectedFile, isSubmitting, analyzePortfolio } =
-    usePortfolioUploadStore();
+  const { selectedFile, analyzePortfolio } = usePortfolioUploadStore();
 
   const showSelectionHint = hasTriedSubmit && !selectedFile;
   const isReady = Boolean(selectedFile);
@@ -13,7 +12,7 @@ function UploadCtaSection() {
   const handleSubmit = () => {
     if (selectedFile?.name) {
       setHasTriedSubmit(false);
-      void analyzePortfolio();
+      analyzePortfolio();
       return;
     }
 
@@ -26,13 +25,11 @@ function UploadCtaSection() {
         <Button
           size="md"
           radius="xl"
-          loading={isSubmitting}
           onClick={handleSubmit}
-          disabled={isSubmitting}
           variant={isReady ? "gradient" : "light"}
           gradient={{ from: "#12b886", to: "#0b7285", deg: 135 }}
           className={isReady ? "analyze-cta" : ""}
-          style={{ width: "360px", maxWidth: "100%" }}
+          style={{ minWidth: "360px", maxWidth: "100%" }}
         >
           Analyze Portfolio
         </Button>

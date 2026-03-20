@@ -1,8 +1,16 @@
-import { Divider, Paper, Stack, Text, ThemeIcon } from "@mantine/core";
+import {
+  Divider,
+  LoadingOverlay,
+  Paper,
+  Stack,
+  Text,
+  ThemeIcon,
+} from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { IconFileText, IconUpload } from "@tabler/icons-react";
 import type { SampleCsv } from "../types/portfolio";
 import { usePortfolioUploadStore } from "../store/portfolioUploadStore";
+import AnalysisLoadingOverlay from "./AnalysisLoadingOverlay";
 import SampleCsvSection from "./SampleCsvSection";
 import UploadCtaSection from "./UploadCtaSection";
 
@@ -23,10 +31,23 @@ function formatFileSize(size: number) {
 }
 
 function PortfolioUploadPanel({ samples }: PortfolioUploadPanelProps) {
-  const { selectedFile, handleDrop, handleReject } = usePortfolioUploadStore();
+  const { selectedFile, handleDrop, handleReject, isSubmitting } =
+    usePortfolioUploadStore();
 
   return (
     <Paper radius="xl" shadow="xl" p="xl" className="upload-panel">
+      <LoadingOverlay
+        visible={isSubmitting}
+        zIndex={1000}
+        overlayProps={{
+          radius: "xl",
+          blur: 2,
+        }}
+        loaderProps={{
+          children: <AnalysisLoadingOverlay visible={isSubmitting} />,
+        }}
+      />
+
       <Stack gap="lg">
         <Dropzone
           onDrop={handleDrop}
@@ -35,6 +56,7 @@ function PortfolioUploadPanel({ samples }: PortfolioUploadPanelProps) {
           maxSize={5 * 1024 ** 2}
           multiple={false}
           className={`dropzone ${selectedFile ? "dropzone-ready" : "dropzone-prompt"}`}
+          radius="lg"
         >
           <Stack align="center" gap="sm" py="xl">
             <ThemeIcon size={64} radius="xl" variant="light" color="teal">

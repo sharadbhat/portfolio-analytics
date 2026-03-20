@@ -1,4 +1,3 @@
-import axios from "axios";
 import type { FileWithPath } from "@mantine/dropzone";
 import { create } from "zustand";
 import { SUBMIT_URL } from "../config";
@@ -30,13 +29,27 @@ function serializeSampleRows(rows: SampleHolding[]) {
 }
 
 async function submitCsvText(csvText: string) {
-  const response = await axios.post<PortfolioAnalyticsResponse>(SUBMIT_URL, csvText, {
+  const response = await fetch(SUBMIT_URL, {
+    method: "POST",
     headers: {
       "Content-Type": "text/csv",
     },
+    body: csvText,
   });
 
-  return response.data.analytics;
+  const payload = (await response.json()) as
+    | PortfolioAnalyticsResponse
+    | { error?: string };
+
+  if (!response.ok) {
+    throw new Error(
+      typeof payload === "object" && payload !== null && "error" in payload
+        ? payload.error || "Unable to submit portfolio right now."
+        : "Unable to submit portfolio right now.",
+    );
+  }
+
+  return (payload as PortfolioAnalyticsResponse).analytics;
 }
 
 export const usePortfolioUploadStore = create<PortfolioUploadState>(
@@ -98,22 +111,14 @@ export const usePortfolioUploadStore = create<PortfolioUploadState>(
           successMessage: "Portfolio submitted successfully.",
         });
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const apiError = error.response?.data?.error;
-          set({
-            fileError:
-              apiError ??
-              `Unable to submit portfolio. Make sure the API is reachable at ${SUBMIT_URL}.`,
-            successMessage: null,
-            analytics: null,
-          });
-        } else {
-          set({
-            fileError: "Unable to submit portfolio right now.",
-            successMessage: null,
-            analytics: null,
-          });
-        }
+        set({
+          fileError:
+            error instanceof Error
+              ? error.message
+              : `Unable to submit portfolio. Make sure the API is reachable at ${SUBMIT_URL}.`,
+          successMessage: null,
+          analytics: null,
+        });
       } finally {
         set({ isSubmitting: false });
       }
@@ -141,22 +146,14 @@ export const usePortfolioUploadStore = create<PortfolioUploadState>(
           successMessage: `${sample.title} submitted successfully.`,
         });
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const apiError = error.response?.data?.error;
-          set({
-            fileError:
-              apiError ??
-              `Unable to submit sample portfolio. Make sure the API is reachable at ${SUBMIT_URL}.`,
-            successMessage: null,
-            analytics: null,
-          });
-        } else {
-          set({
-            fileError: "Unable to submit sample portfolio right now.",
-            successMessage: null,
-            analytics: null,
-          });
-        }
+        set({
+          fileError:
+            error instanceof Error
+              ? error.message
+              : `Unable to submit sample portfolio. Make sure the API is reachable at ${SUBMIT_URL}.`,
+          successMessage: null,
+          analytics: null,
+        });
       } finally {
         set({ isSubmitting: false });
       }
