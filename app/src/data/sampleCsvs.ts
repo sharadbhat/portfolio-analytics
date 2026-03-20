@@ -4,7 +4,7 @@ export const sampleCsvs: SampleCsv[] = [
   {
     title: "Starter Portfolio",
     description: "A balanced mix of large-cap equities and bond exposure.",
-    fileName: "starter-portfolio.csv",
+    fileName: "Starter Portfolio",
     holdings: "6 holdings",
     rows: [
       { ticker: "AAPL", quantity: 20, avgBuyPrice: 182.4 },
@@ -18,7 +18,7 @@ export const sampleCsvs: SampleCsv[] = [
   {
     title: "Growth Tilt",
     description: "A concentrated tech and innovation-focused allocation.",
-    fileName: "growth-tilt.csv",
+    fileName: "Growth Tilt Portfolio",
     holdings: "7 holdings",
     rows: [
       { ticker: "NVDA", quantity: 16, avgBuyPrice: 910.5 },
@@ -33,7 +33,7 @@ export const sampleCsvs: SampleCsv[] = [
   {
     title: "Income Focus",
     description: "Dividend-oriented holdings for income and lower volatility.",
-    fileName: "income-focus.csv",
+    fileName: "Income Focus Portfolio",
     holdings: "6 holdings",
     rows: [
       { ticker: "SCHD", quantity: 28, avgBuyPrice: 79.45 },
