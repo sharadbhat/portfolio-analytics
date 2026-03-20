@@ -72,39 +72,39 @@ The screenshots below show how the project is meant to feel in use: editorial on
 
 The homepage is built to feel less like a generic dashboard and more like a focused portfolio analysis experience. The hero section introduces the tool clearly, while the upload panel keeps the workflow simple: upload a CSV, inspect sample portfolios, and move directly into analysis.
 
-![Homepage and upload flow](C:/Users/shara/Documents/Github/portfolio-analytics/media/homepage.png)
+![Homepage and upload flow](./media/homepage.png)
 
 ### Holdings breakdown
 
 The holdings view shows position-level concentration clearly. Instead of stopping at a raw table, it emphasizes how capital is distributed across individual names so users can quickly identify oversized exposures and imbalances.
 
-![Stock breakdown view](C:/Users/shara/Documents/Github/portfolio-analytics/media/stocks.png)
+![Stock breakdown view](./media/stocks.png)
 
 ### Sector allocation
 
 The sector view complements the stock-level picture by aggregating exposure into broader themes. This is where users can spot hidden concentration that may not be obvious from ticker weights alone, especially when several holdings cluster into the same sector.
 
-![Sector breakdown view](C:/Users/shara/Documents/Github/portfolio-analytics/media/sectors.png)
+![Sector breakdown view](./media/sectors.png)
 
 ### Performance analytics
 
 The performance tab focuses on interpretation, not just raw return numbers. It combines summary metrics with historical visuals so users can compare portfolio growth to a benchmark, inspect drawdowns, and understand day-to-day P/L behavior in context.
 
-![Performance overview metrics](C:/Users/shara/Documents/Github/portfolio-analytics/media/perf1.png)
+![Performance overview metrics](./media/perf1.png)
 
-![Performance charts](C:/Users/shara/Documents/Github/portfolio-analytics/media/perf2.png)
+![Performance charts](./media/perf2.png)
 
 ### Risk dashboard
 
 The risk tab is designed to make technical metrics more readable. Sharpe, Sortino, VaR, CVaR, and drawdown are presented with short interpretive guidance so the page works for both technical users and less quantitative audiences.
 
-![Risk metrics view](C:/Users/shara/Documents/Github/portfolio-analytics/media/risk.png)
+![Risk metrics view](./media/risk.png)
 
 ### Dark mode
 
 The interface also supports a dark presentation, which helps the project feel more complete as a showcase piece and keeps longer analysis sessions comfortable in lower-light environments.
 
-![Dark mode view](C:/Users/shara/Documents/Github/portfolio-analytics/media/dark.png)
+![Dark mode view](./media/dark.png)
 
 ## Example Input
 
@@ -311,7 +311,7 @@ For production serving, the backend can serve the compiled frontend directly fro
 
 The production WSGI entrypoint is:
 
-- [wsgi.py](/C:/Users/shara/Documents/Github/portfolio-analytics/server/wsgi.py)
+- [wsgi.py](/./server/wsgi.py)
 
 Example command:
 
