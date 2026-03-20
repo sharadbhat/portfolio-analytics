@@ -1,5 +1,3 @@
-export const API_BASE_URL = import.meta.env.DEV
-  ? "http://localhost:8000"
-  : "http://localhost:8000";
-
-export const SUBMIT_URL = `${API_BASE_URL}/submit`;
+export const SUBMIT_URL = import.meta.env.DEV
+  ? "http://localhost:8000/submit"
+  : "/submit";
